@@ -6,6 +6,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class RocketMqConfig {
     private RocketMqConfigProperties rocketMqConfigProperties;
 
     @Bean
+    // 在该bean不存在的情况下此方法才会执行
+    @ConditionalOnMissingBean
     DefaultMQPushConsumer getConsumer() {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(rocketMqConfigProperties.getConsumerGroup());
         consumer.setNamesrvAddr(rocketMqConfigProperties.getNamesrvAddr());
@@ -44,6 +47,8 @@ public class RocketMqConfig {
     }
 
     @Bean
+    // 在该bean不存在的情况下此方法才会执行
+    @ConditionalOnMissingBean
     MyMqProducer getProducer() {
         //生产者的组名
         MyMqProducer producer = new MyMqProducer(rocketMqConfigProperties.getProducerGroup(), rocketMqConfigProperties.getTopic());
